@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package com.example.inventory;
+option java_multiple_files = true;
+option java_package = "com.example.inventory";
+// Define the gRPC service interface
+service InventoryGrpcService {
+  // RPC method to check product existence and get quantity
+  rpc checkProductExistence(ProductExistenceRequest) returns (ProductExistenceResponse);
+
+}
+
+
+message ProductExistenceRequest {
+  int32 product_id = 1; // Use int32 for Java Integer/int
+  string product_name = 2;
+}
+
+
+message ProductExistenceResponse {
+  bool exists = 1; // Flag indicating if the product exists
+  int32 quantity = 2; // Current quantity if it exists (will be 0 or default if exists=false)
+}
