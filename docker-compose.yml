@@ -1,6 +1,59 @@
 version: '3.8'
 
 services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    command: start-dev # Reverted to simple start-dev
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL_HOST=keycloak-db
+      - KC_DB_URL_PORT=5432
+      - KC_DB_URL_DATABASE=keycloak
+      - KC_DB_USERNAME=keycloak
+      - KC_DB_PASSWORD=password
+      - KC_HEALTHCHECK_ENABLED=true
+      - KC_LOG_LEVEL=INFO
+      
+      # --- CORRECT KEYCLOAK 26+ HOSTNAME CONFIGURATION (Environment Variables) ---
+      # This is the primary public hostname Keycloak should use for all URLs
+      - KC_HOSTNAME=localhost 
+      # This sets the internal HTTP port Keycloak is listening on.
+      # It should match the container's exposed port.
+      - KC_HTTP_PORT=8080 
+      # Define how Keycloak determines its own hostnames in a proxied environment (Docker).
+      # 'passthrough' uses headers from the proxy to determine the frontend URL.
+      - KC_PROXY=passthrough 
+      # Explicitly disable strict hostname checking for development.
+      # This is often the key to bypassing "Local access required" in dev.
+      - KC_HOSTNAME_STRICT=false 
+      # --- End Keycloak 26+ Hostname Configuration ---
+      
+    ports:
+      - "8081:8080" # Map host port 8081 to container port 8080
+    depends_on:
+      - keycloak-db
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    networks:
+      - micro-net
+
+  keycloak-db:
+    image: postgres:15-alpine
+    container_name: keycloak-db
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5435:5432" # Map host port 5435 to container port 5432
+    volumes:
+      - keycloak_db_data:/var/lib/postgresql/data # Persistent data for PostgreSQL
+    networks:
+      - micro-net
+
   service-registry:
     build: ./service-registry
     container_name: service-registry
@@ -32,17 +85,17 @@ services:
 
   orders:
     build: ./orders
-    container_name: orders
+    # container_name: orders # Uncomment if you want a fixed name
     environment:
-    - SPRING_DATASOURCE_URL=jdbc:postgresql://orders-db:5432/ordersdb
-    - SPRING_DATASOURCE_USERNAME=ordersuser
-    - SPRING_DATASOURCE_PASSWORD=orderspass
-    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
-    - SPRING_CLOUD_CONFIG_URI=http://config-server:5555
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://orders-db:5432/ordersdb
+      - SPRING_DATASOURCE_USERNAME=ordersuser
+      - SPRING_DATASOURCE_PASSWORD=orderspass
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:5555
     depends_on:
-    - orders-db
-    - service-registry
-    - config-server
+      - orders-db
+      - service-registry
+      - config-server
     networks:
       - micro-net
 
@@ -50,15 +103,15 @@ services:
     build: ./Inventory-MicroService
     container_name: inventory
     environment:
-    - SPRING_DATASOURCE_URL=jdbc:postgresql://inventory-db:5432/inventorydb
-    - SPRING_DATASOURCE_USERNAME=inventoryuser
-    - SPRING_DATASOURCE_PASSWORD=inventorypass
-    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
-    - SPRING_CLOUD_CONFIG_URI=http://config-server:5555
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://inventory-db:5432/inventorydb
+      - SPRING_DATASOURCE_USERNAME=inventoryuser
+      - SPRING_DATASOURCE_PASSWORD=inventorypass
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:5555
     depends_on:
-    - inventory-db
-    - service-registry
-    - config-server
+      - inventory-db
+      - service-registry
+      - config-server
     networks:
       - micro-net
 
@@ -70,7 +123,7 @@ services:
       POSTGRES_USER: ordersuser
       POSTGRES_PASSWORD: orderspass
     ports:
-    - "5434:5432"  # Map host port 5434 to container port 5432
+      - "5434:5432" # Map host port 5434 to container port 5432
     volumes:
       - orders-db-data:/var/lib/postgresql/data
     networks:
@@ -84,15 +137,81 @@ services:
       POSTGRES_USER: inventoryuser
       POSTGRES_PASSWORD: inventorypass
     ports:
-    - "5433:5432"  # Map host port 5433 to container port 5432
+      - "5433:5432" # Map host port 5433 to container port 5432
     volumes:
       - inventory-db-data:/var/lib/postgresql/data
     networks:
       - micro-net
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:8.13.2 # Specify the version
+  #   container_name: elasticsearch
+  #   environment:
+  #     - discovery.type=single-node # Essential for a single-node setup
+  #     - ES_JAVA_OPTS=-Xms512m -Xmx512m # Allocate memory (adjust based on your RAM)
+  #     - xpack.security.enabled=false # Disable security for dev (DO NOT USE IN PROD)
+  #   ports:
+  #     - "9200:9200" # Expose Elasticsearch HTTP port (Kibana connects internally)
+  #   volumes:
+  #     - elasticsearch_data:/usr/share/elasticsearch/data # Persistent storage for data
+  #   networks:
+  #     - micro-net # Connect to your custom network
+
+  # # --- Kibana ---
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:8.13.2 # Same version as Elasticsearch
+  #   container_name: kibana
+  #   environment:
+  #     - ELASTICSEARCH_HOSTS=http://elasticsearch:9200 # Connects to Elasticsearch using its Docker service name
+  #     - xpack.security.enabled=false # Disable security for dev (DO NOT USE IN PROD)
+  #   ports:
+  #     - "5601:5601" # Expose Kibana UI port to your host machine
+  #   networks:
+  #     - micro-net
+  #   depends_on:
+  #     - elasticsearch # Kibana needs Elasticsearch to be running
+
+  # # --- Logstash (The data processing pipeline - Recommended) ---
+  # logstash:
+  #   image: docker.elastic.co/logstash/logstash:8.13.2 # Same version as other components
+  #   container_name: logstash
+  #   command: logstash -f /usr/share/logstash/config/logstash.conf # Tell Logstash to use our config file
+  #   volumes:
+  #     # Mount your Logstash configuration file into the container
+  #     - ./logstash/logstash.conf:/usr/share/logstash/config/logstash.conf:ro
+  #   ports:
+  #     - "5044:5044" # Expose the Beats input port for Filebeat
+  #     # - "9600:9600" # Optional: Logstash monitoring API
+  #   environment:
+  #     - LS_JAVA_OPTS="-Xms256m -Xmx256m" # Allocate memory (adjust based on your RAM)
+  #   networks:
+  #     - micro-net
+  #   depends_on:
+  #     - elasticsearch # Logstash needs Elasticsearch to send processed data to
+
+  # # --- Filebeat (The lightweight log shipper - Collects from your microservices) ---
+  # filebeat:
+  #   image: docker.elastic.co/beats/filebeat:8.13.2 # Same version as other components
+  #   container_name: filebeat
+  #   user: root # Needed for reading Docker logs and accessing the Docker socket
+  #   command: ["filebeat", "-e", "-strict.perms=false"] # -e logs to stdout, -strict.perms=false for dev environment
+  #   volumes:
+  #     # Mount your Filebeat configuration file
+  #     - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+  #     # Mount the Docker socket to allow Filebeat to discover and read logs from other containers
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  #     # Mount the Docker container logs directory (where Docker stores container logs)
+  #     - /var/lib/docker/containers:/var/lib/docker/containers:ro
+  #   networks:
+  #     - micro-net
+  #   depends_on:
+  #     - logstash # Filebeat sends logs to Logstash
 
 volumes:
   orders-db-data:
   inventory-db-data:
+  keycloak_data: # For Keycloak config and possibly caching
+  keycloak_db_data: # For PostgreSQL database files
+  # elastic_data:
 networks:
   micro-net:
     driver: bridge

@@ -1,1 +1,3 @@
 com\example\apigateway\ApiGatewayApplication.class
+com\example\apigateway\SecurityConfig.class
+com\example\apigateway\KeycloakRoleConverter.class
