@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bb5f4ca6-753f-4568-b08b-858348ed97bc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Inventory-MicroService/src/main/resources/logback-spring.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../configuration-server/src/main/resources/logback-spring.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../orders/src/main/resources/logback-spring.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../service-registry/src/main/resources/logback-spring.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Inventory-MicroService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Inventory-MicroService/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../configuration-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../configuration-server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../orders/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../orders/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../service-registry/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../service-registry/pom.xml" afterDir="false" />
-    </list>
+    <list default="true" id="bb5f4ca6-753f-4568-b08b-858348ed97bc" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -52,6 +42,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.ApiGatewayApplication.executor": "Run",
+    "Maven.api-gateway [clean,package,-DskipTests].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -72,6 +63,11 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\backend-development\orders-microservice-project\Api-gateway\src\main\resources" />
     </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean package -DskipTests" />
+    </option>
   </component>
   <component name="RunManager" selected="Application.ApiGatewayApplication">
     <configuration name="ApiGatewayApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
