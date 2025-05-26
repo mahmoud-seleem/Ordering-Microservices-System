@@ -184,7 +184,10 @@ services:
       - "5044:5044" # Expose the Beats input port for Filebeat
       # - "9600:9600" # Optional: Logstash monitoring API
     environment:
-      - LS_JAVA_OPTS="-Xms256m -Xmx256m" # Allocate memory (adjust based on your RAM)
+      # --- CRUCIAL CHANGE HERE ---
+      # Change from: - LS_JAVA_OPTS="-Xms256m -Xmx256m"
+      # To this key-value pair syntax with quotes around the value:
+      LS_JAVA_OPTS: "-Xms256m -Xmx256m" 
     networks:
       - micro-net
     depends_on:

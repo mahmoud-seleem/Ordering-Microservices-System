@@ -1,0 +1,18 @@
+filebeat.inputs:
+  - type: container
+    paths:
+      - /var/lib/docker/containers/*/*.log # Path where Docker stores container logs
+    processors:
+      - add_docker_metadata: # Add metadata about the container (name, ID, image, etc.)
+          host: "unix:///var/run/docker.sock"
+          
+# Output to Logstash
+output.logstash:
+  hosts: ["logstash:5044"] # Point to Logstash using its Docker service name and Beats input port
+  # If Logstash is not used, you can output directly to Elasticsearch:
+  # output.elasticsearch:
+  #   hosts: ["elasticsearch:9200"]
+
+# Setup Kibana endpoint for Filebeat to load Kibana dashboards/index patterns (optional but good)
+setup.kibana:
+  host: "kibana:5601" # Point to Kibana using its Docker service name
