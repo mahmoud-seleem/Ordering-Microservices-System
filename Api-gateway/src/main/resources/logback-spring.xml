@@ -6,9 +6,13 @@
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <customFields>{"serviceName":"${springAppName}"}</customFields>
             <fieldNames>
-                <level>logLevel</level> <thread>threadName</thread>
+                <level>logLevel</level>
+                <thread>threadName</thread>
                 <message>msg</message>
                 <timestamp>timestamp</timestamp>
+                <mdc>
+                    <fieldName>correlationId</fieldName>
+                </mdc>
             </fieldNames>
             <includeContext>true</includeContext>
             <includeCallerData>false</includeCallerData>

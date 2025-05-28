@@ -1,3 +1,4 @@
 D:\backend-development\orders-microservice-project\Api-gateway\src\main\java\com\example\apigateway\ApiGatewayApplication.java
 D:\backend-development\orders-microservice-project\Api-gateway\src\main\java\com\example\apigateway\KeycloakRoleConverter.java
+D:\backend-development\orders-microservice-project\Api-gateway\src\main\java\com\example\apigateway\logging\CorrelationIdGatewayFilter.java
 D:\backend-development\orders-microservice-project\Api-gateway\src\main\java\com\example\apigateway\SecurityConfig.java

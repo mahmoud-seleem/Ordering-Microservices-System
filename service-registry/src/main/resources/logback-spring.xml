@@ -9,6 +9,9 @@
                 <level>logLevel</level> <thread>threadName</thread>
                 <message>msg</message>
                 <timestamp>timestamp</timestamp>
+                <mdc>
+                    <fieldName>correlationId</fieldName>
+                </mdc>
             </fieldNames>
             <includeContext>true</includeContext>
             <includeCallerData>false</includeCallerData>
