@@ -85,7 +85,7 @@ services:
 
   orders:
     build: ./orders
-    # container_name: orders # Uncomment if you want a fixed name
+    container_name: orders # Uncomment if you want a fixed name
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://orders-db:5432/ordersdb
       - SPRING_DATASOURCE_USERNAME=ordersuser

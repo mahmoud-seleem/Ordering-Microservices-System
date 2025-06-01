@@ -4,20 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bb5f4ca6-753f-4568-b08b-858348ed97bc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Inventory-MicroService/src/main/java/com/example/inventory/logging/CorrelationIdServletFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Inventory-MicroService/src/main/java/com/example/inventory/logging/FeignCorrelationIdInterceptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Inventory-MicroService/src/main/java/com/example/inventory/logging/RestTemplateCorrelationIdInterceptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Inventory-MicroService/src/main/java/com/example/inventory/logging/RestTemplateLoggingConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../orders/src/main/java/com/example/orders/shared/logging/CorrelationIdServletFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../orders/src/main/java/com/example/orders/shared/logging/FeignCorrelationIdInterceptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../orders/src/main/java/com/example/orders/shared/logging/RestTemplateCorrelationIdInterceptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../orders/src/main/java/com/example/orders/shared/logging/RestTemplateLoggingConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../service-registry/src/main/java/com/example/service_registry/logging/CorrelationIdServletFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../service-registry/src/main/java/com/example/service_registry/logging/FeignCorrelationIdInterceptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../service-registry/src/main/java/com/example/service_registry/logging/RestTemplateCorrelationIdInterceptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../service-registry/src/main/java/com/example/service_registry/logging/RestTemplateLoggingConfig.java" afterDir="false" />
-    </list>
+    <list default="true" id="bb5f4ca6-753f-4568-b08b-858348ed97bc" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
